@@ -1,15 +1,17 @@
+import 'package:untitled/enums/sexo.dart';
 import 'package:untitled/models/endereco.dart';
 
 class Passageiro {
   final String nome;
   final int idade;
-  final String sexo;
+  final Sexo? sexo;
   final Endereco? endereco;
 
   Passageiro({
     required this.nome,
     required this.idade,
-    required this.sexo,
+    this.sexo,
     this.endereco,
   });
+
 }

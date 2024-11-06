@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:untitled/models/estado.dart';
 import 'package:untitled/models/municipio.dart';
-import 'package:untitled/models/passageiro.dart';
-import 'package:untitled/memory_db.dart';
+import 'package:untitled/repositories/endereco-repository.dart';
 import 'package:untitled/services/endereco-service.dart';
+import 'package:untitled/services/passageiro-service.dart';
 
 class CadastroPassageiroWidget extends StatefulWidget {
   const CadastroPassageiroWidget({super.key});
@@ -22,7 +22,8 @@ class _CadastroPassageiroWidget extends State<CadastroPassageiroWidget> {
   final _ruaController = TextEditingController();
   final _numeroController = TextEditingController();
   final _complementoController = TextEditingController();
-  final _enderecoService = EnderecoService();
+  final _enderecoService = EnderecoService(EnderecoRepository());
+  final _passageiroService = PassageiroService();
   String? _sexoSelecionado;
   List<Estado> _estados = [];
   Estado? _estadoSelecionado;
@@ -100,7 +101,9 @@ class _CadastroPassageiroWidget extends State<CadastroPassageiroWidget> {
           value: _sexoSelecionado,
           hint: const Text('Selecione um sexo'),
           onChanged: (String? newValue) {
-            _sexoSelecionado = newValue;
+            setState(() {
+              _sexoSelecionado = newValue;
+            });
           },
           items: const [
             DropdownMenuItem(
@@ -164,8 +167,14 @@ class _CadastroPassageiroWidget extends State<CadastroPassageiroWidget> {
 
   void _cadastrar() {
     if (_formKey.currentState!.validate()) {
+
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: const Text('Formulário válido!')),
+        const SnackBar(content: Text('Passageiro cadastrado com sucesso!')),
+      );
+    }
+    else{
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Formulário inválido!')),
       );
     }
   }
@@ -277,10 +286,17 @@ class _CadastroPassageiroWidget extends State<CadastroPassageiroWidget> {
                     },
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 32),
                 ElevatedButton(
                   onPressed: _cadastrar,
                   child: const Text('Cadastrar'),
+
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 100),
+                    textStyle: const TextStyle(
+                      fontSize: 20
+                    )
+                  ),
                 ),
                 if (errorMessage.isNotEmpty)
                   Padding(

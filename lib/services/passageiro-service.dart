@@ -5,6 +5,7 @@ import 'package:untitled/models/municipio.dart';
 import 'package:untitled/models/passageiro.dart';
 
 class PassageiroService {
+
   void _cadastrar(
       String nome,
       int idade,
@@ -15,16 +16,17 @@ class PassageiroService {
       String rua,
       String numero,
       String cep,
-      String complemento) {
+      String complemento
+      ) {
     Endereco endereco =
         Endereco(estado, municipio, bairro, rua, numero, complemento);
-    Passageiro passageiro = Passageiro(nome: nome, idade: idade, sexo: sexo);
+    Passageiro passageiro = Passageiro(nome: nome, idade: idade, /*sexo: sexo*/);
 
     Memorydb.CurrentUser?.passageirosList.add(
       Passageiro(
         nome: nome,
         idade: idade,
-        sexo: sexo,
+        //sexo: sexo,
         //endereco: endereco,
       ),
     );
