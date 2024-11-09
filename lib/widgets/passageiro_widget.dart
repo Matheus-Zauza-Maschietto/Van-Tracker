@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:untitled/widgets/cadastro_passageiro_widget.dart';
+import 'package:untitled/widgets/lista_passageiro_widget.dart';
 
 class PassageiroWidget extends StatefulWidget {
   const PassageiroWidget({super.key});
@@ -8,17 +10,24 @@ class PassageiroWidget extends StatefulWidget {
 }
 
 class _PassageiroWidgetState extends State<PassageiroWidget> {
+  final GlobalKey<ListaPassageiroWidgetState> _listarPassageirosKey = GlobalKey();
+
+  Future<void> _abrirCadastro() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => CadastroPassageiroWidget()),
+    );
+    _listarPassageirosKey.currentState!.CarregarPassageiros();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Container(
-        height: 200,
-        width: 200,
-        color: Colors.blueAccent,
-        child: const Text(
-          'Meu card'
-        ),
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: _abrirCadastro,
+        backgroundColor: Colors.grey.shade200,
+        child: Icon(Icons.add, color: Colors.black),
       ),
+      body: ListaPassageiroWidget(key: _listarPassageirosKey),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/models/user.dart';
 import 'package:untitled/memory_db.dart';
+import 'package:untitled/repositories/user_repository.dart';
 import 'package:untitled/screens/cadastro_screen.dart';
 import 'package:untitled/screens/home_screen.dart';
 import 'package:untitled/services/user-service.dart';
@@ -15,14 +16,14 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
-  final _userService = UserService();
+  final _userService = UserService(UserRepository());
   String errorMessage = '';
 
-  void _login() {
+  void _login() async {
     String email = _emailController.text;
     String senha = _senhaController.text;
 
-    var (errorMessage, islogged, user) = _userService.Login(email, senha);
+    var (errorMessages, islogged, user) = await _userService.Login(email, senha);
 
     if(islogged){
       Memorydb.CurrentUser = user;
@@ -33,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
     else{
       setState(() {
-        errorMessage = errorMessage;
+        errorMessage = errorMessages;
       });
     }
   }

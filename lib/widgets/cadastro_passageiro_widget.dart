@@ -1,10 +1,19 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
+import 'package:untitled/constants/constants.dart';
+import 'package:untitled/constants/sexo.dart';
+import 'package:untitled/models/endereco.dart';
 import 'package:untitled/models/estado.dart';
 import 'package:untitled/models/municipio.dart';
+import 'package:untitled/models/passageiro.dart';
+import 'package:untitled/patterns/dropdown-decoration.dart';
 import 'package:untitled/repositories/endereco-repository.dart';
+import 'package:untitled/repositories/passageiros-repository.dart';
 import 'package:untitled/services/endereco-service.dart';
 import 'package:untitled/services/passageiro-service.dart';
+import 'package:untitled/widgets/cadastrar_endereco_widget.dart';
 
 class CadastroPassageiroWidget extends StatefulWidget {
   const CadastroPassageiroWidget({super.key});
@@ -15,168 +24,44 @@ class CadastroPassageiroWidget extends StatefulWidget {
 
 class _CadastroPassageiroWidget extends State<CadastroPassageiroWidget> {
   final _formKey = GlobalKey<FormState>();
+  final GlobalKey<CadastrarEnderecoWidgetState> _enderecoKey = GlobalKey();
   final _nomeController = TextEditingController();
   final _idadeController = TextEditingController();
-  final _cepController = MaskedTextController(mask: '00000-000');
-  final _bairroController = TextEditingController();
-  final _ruaController = TextEditingController();
-  final _numeroController = TextEditingController();
-  final _complementoController = TextEditingController();
+  final _passageiroService = PassageiroService(PassageiroRepository());
   final _enderecoService = EnderecoService(EnderecoRepository());
-  final _passageiroService = PassageiroService();
   String? _sexoSelecionado;
-  List<Estado> _estados = [];
-  Estado? _estadoSelecionado;
-  List<Municipio> _municipios = [];
-  Municipio? _municipioSelecionado;
-  String errorMessage = '';
 
-  @override
-  void initState() {
-    super.initState();
-    carregarEstados();
-  }
+  void _cadastrar() async {
+    if (!_formKey.currentState!.validate()) {
+      const SnackBar(content: Text('Formulário inválido!'));
+    }
 
-  Future<void> carregarEstados() async {
-    List<Estado> estados = await _enderecoService.buscarEstados();
-    setState(() {
-      _estados = estados;
-    });
-  }
-
-  Future<void> carregarMunicipios(Estado estado) async {
-    List<Municipio> municipios =
-        await _enderecoService.buscarMunicipios(estado.id);
-    setState(() {
-      _municipios = [];
-      _municipioSelecionado = null;
-      _municipios = municipios;
-    });
-  }
-
-  Widget _buscarDropdownEstados() {
-    return _estados.isEmpty
-        ? const CircularProgressIndicator()
-        : Container(
-            width: double.infinity, // Ocupa 100% da largura
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
-              borderRadius: BorderRadius.circular(8.0),
-              color: Colors.white,
-            ),
-            child: DropdownButton<Estado>(
-              isExpanded: true,
-              value: _estadoSelecionado,
-              hint: const Text('Selecione um estado'),
-              onChanged: (Estado? newValue) {
-                setState(() {
-                  _estadoSelecionado = newValue;
-                });
-                carregarMunicipios(_estadoSelecionado!);
-              },
-              items: _estados.map<DropdownMenuItem<Estado>>((Estado estado) {
-                return DropdownMenuItem<Estado>(
-                  value: estado,
-                  child: Text(estado.nome),
-                );
-              }).toList(),
-            ),
-          );
-  }
-
-  Widget _buscarDropdownSexo() {
-    return Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-        margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(8.0),
-          color: Colors.white,
-        ),
-        child: DropdownButton<String>(
-          isExpanded: true,
-          value: _sexoSelecionado,
-          hint: const Text('Selecione um sexo'),
-          onChanged: (String? newValue) {
-            setState(() {
-              _sexoSelecionado = newValue;
-            });
-          },
-          items: const [
-            DropdownMenuItem(
-              value: "Masculino",
-              child: Text("Masculino"),
-            ),
-            DropdownMenuItem(
-              value: "Feminino",
-              child: Text("Feminino"),
-            ),
-            DropdownMenuItem(
-              value: "Outro",
-              child: Text("Outro"),
-            ),
-          ],
-        ));
-  }
-
-  Widget _buscarDropdownMunicipios() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(8.0),
-        color: Colors.white,
-      ),
-      child: _municipios.isEmpty
-          ? DropdownButton<Municipio>(
-              isExpanded: true,
-              value: _municipioSelecionado,
-              hint: const Text('Selecione um estado acima'),
-              onChanged: (Municipio? newValue) {},
-              items: [
-                DropdownMenuItem(
-                  value: Municipio(-1, "Selecione um estado acima"),
-                  child: const Text("Selecione um estado acima"),
-                )
-              ],
-            )
-          : DropdownButton<Municipio>(
-              isExpanded: true,
-              value: _municipioSelecionado,
-              hint: const Text('Selecione uma cidade'),
-              onChanged: (Municipio? newValue) {
-                setState(() {
-                  _municipioSelecionado = newValue;
-                });
-              },
-              items: _municipios
-                  .map<DropdownMenuItem<Municipio>>((Municipio municipio) {
-                return DropdownMenuItem<Municipio>(
-                  value: municipio,
-                  child: Text(municipio.nome),
-                );
-              }).toList(),
-            ),
+    Endereco novoEndereco = Endereco(
+        id: Random().nextInt(Constants.idMax),
+        estadoId: _enderecoKey.currentState!.estadoSelecionado!.id,
+        municipioId: _enderecoKey.currentState!.municipioSelecionado!.id,
+        bairro: _enderecoKey.currentState!.bairroController.text,
+        rua: _enderecoKey.currentState!.ruaController.text,
+        numero: _enderecoKey.currentState!.numeroController.text,
+        complemento: _enderecoKey.currentState!.complementoController.text,
+        cep: _enderecoKey.currentState!.cepController.text
     );
-  }
+    Endereco endereco = await _enderecoService.CriarEndereco(novoEndereco);
+    Passageiro novoPassageiro = Passageiro(
+        id: Random().nextInt(Constants.idMax),
+        nome: _nomeController.text,
+        idade: int.parse(_idadeController.text),
+        sexo: Sexo.values.firstWhere((p) => p.toString() == _sexoSelecionado),
+        enderecoId: endereco.id
+    );
+    Passageiro passageiro =
+        await _passageiroService.CriarPassageiro(novoPassageiro);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Passageiro cadastrado com sucesso!')),
+    );
 
-  void _cadastrar() {
-    if (_formKey.currentState!.validate()) {
+    Navigator.pop(context);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Passageiro cadastrado com sucesso!')),
-      );
-    }
-    else{
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Formulário inválido!')),
-      );
-    }
   }
 
   @override
@@ -219,93 +104,45 @@ class _CadastroPassageiroWidget extends State<CadastroPassageiroWidget> {
                     },
                   ),
                 ),
-                _buscarDropdownSexo(),
-                _buscarDropdownEstados(),
-                _buscarDropdownMunicipios(),
                 Container(
-                  margin: const EdgeInsets.all(10),
-                  child: TextFormField(
-                    controller: _bairroController,
-                    decoration: const InputDecoration(labelText: 'Bairro'),
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                  decoration: DropDownDecoration.boxDecoration,
+                  child: DropdownButtonFormField<String>(
+                    isExpanded: true,
+                    value: _sexoSelecionado,
+                    hint: const Text('Selecione um sexo'),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _sexoSelecionado = newValue!;
+                      });
+                    },
+                    items: [
+                      DropdownMenuItem(child: Text("Masculino"), value: Sexo.masculino.toString(),),
+                      DropdownMenuItem(child: Text("Feminino"), value: Sexo.feminino.toString(),),
+                      DropdownMenuItem(child: Text("Outro"), value: Sexo.outro.toString(),)
+                    ],
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor preencha o Bairro';
+                      if (value == null) {
+                        return 'Por favor preencha o Sexo';
                       }
                       return null;
                     },
                   ),
                 ),
-                Container(
-                  margin: const EdgeInsets.all(10),
-                  child: TextFormField(
-                    controller: _ruaController,
-                    decoration: const InputDecoration(labelText: 'Rua'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor preencha a Rua';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.all(10),
-                  child: TextFormField(
-                    controller: _numeroController,
-                    decoration: const InputDecoration(labelText: 'Número'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor preencha o Número';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Container(
-                    margin: EdgeInsets.all(10),
-                    child: TextFormField(
-                      controller: _complementoController,
-                      decoration:
-                          const InputDecoration(labelText: 'Complemento'),
-                    )),
-                Container(
-                  margin: EdgeInsets.all(10),
-                  child: TextFormField(
-                    controller: _cepController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: 'CEP',
-                      hintText: '00000-000',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty || value.length < 9) {
-                        return 'Por favor preencha o CEP';
-                      }
-                      return null;
-                    },
-                  ),
+                CadastrarEnderecoWidget(
+                  key: _enderecoKey,
                 ),
                 const SizedBox(height: 32),
                 ElevatedButton(
                   onPressed: _cadastrar,
                   child: const Text('Cadastrar'),
-
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 100),
-                    textStyle: const TextStyle(
-                      fontSize: 20
-                    )
-                  ),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 20, horizontal: 100),
+                      textStyle: const TextStyle(fontSize: 20)),
                 ),
-                if (errorMessage.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      errorMessage,
-                      style: const TextStyle(color: Colors.red),
-                    ),
-                  ),
               ],
             ),
           ),

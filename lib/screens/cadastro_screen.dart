@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/models/user.dart';
 import 'package:untitled/memory_db.dart';
+import 'package:untitled/repositories/user_repository.dart';
 import 'package:untitled/screens/login_screen.dart';
 import 'package:untitled/services/user-service.dart';
 
@@ -12,18 +13,18 @@ class CadastroScreen extends StatefulWidget {
 }
 
 class _CadastroScreenState extends State<CadastroScreen> {
-  final _userService = UserService();
+  final _userService = UserService(UserRepository());
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
   final _nomeController = TextEditingController();
   String errorMessage = '';
 
-  void _cadastrar() {
+  void _cadastrar() async {
     String email = _emailController.text;
     String senha = _senhaController.text;
     String nome = _nomeController.text;
 
-    String errorMessage = _userService.Cadastrar(email, nome, senha);
+    String errorMessage = await _userService.Cadastrar(email, nome, senha);
     if(errorMessage == ''){
       Navigator.pushReplacement(
         context,

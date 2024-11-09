@@ -1,0 +1,283 @@
+{
+  "passageiros": [
+    {
+      "id": "2",
+      "nome": "Ana",
+      "idade": 25,
+      "sexo": 2,
+      "enderecoId": 5
+    },
+    {
+      "id": "4",
+      "nome": "Beatriz",
+      "idade": 22,
+      "sexo": 2,
+      "enderecoId": 6
+    },
+    {
+      "id": "5798347",
+      "nome": "123",
+      "idade": 123,
+      "enderecoId": 6340192,
+      "sexo": 2
+    }
+  ],
+  "viagens": [
+    {
+      "id": "1",
+      "inicio": 1,
+      "fim": 2
+    },
+    {
+      "id": "2",
+      "inicio": 3,
+      "fim": 1
+    }
+  ],
+  "passageiroViagens": [
+    {
+      "passageiroId": 1,
+      "viagemId": 2,
+      "checkinViagem": false,
+      "checkoutViagem": false,
+      "id": "1"
+    },
+    {
+      "passageiroId": 2,
+      "viagemId": 2,
+      "checkinViagem": false,
+      "checkoutViagem": false,
+      "id": "2"
+    },
+    {
+      "passageiroId": 3,
+      "viagemId": 2,
+      "checkinViagem": false,
+      "checkoutViagem": false,
+      "id": "3"
+    },
+    {
+      "passageiroId": 4,
+      "viagemId": 2,
+      "checkinViagem": false,
+      "checkoutViagem": false,
+      "id": "4"
+    },
+    {
+      "passageiroId": 5,
+      "viagemId": 2,
+      "checkinViagem": false,
+      "checkoutViagem": false,
+      "id": "5"
+    },
+    {
+      "passageiroId": 6,
+      "viagemId": 1,
+      "checkinViagem": false,
+      "checkoutViagem": false,
+      "id": "6"
+    }
+  ],
+  "enderecos": [
+    {
+      "id": "1",
+      "estadoId": 1,
+      "municipioId": 101,
+      "bairro": "Centro",
+      "rua": "Rua das Flores",
+      "numero": "123",
+      "complemento": "Apartamento 45",
+      "cep": "1231231-123"
+    },
+    {
+      "id": "2",
+      "estadoId": 1,
+      "municipioId": 102,
+      "bairro": "Jardim Europa",
+      "rua": "Avenida Paulista",
+      "numero": "456",
+      "complemento": "",
+      "cep": "1231231-123"
+    },
+    {
+      "id": "3",
+      "estadoId": 2,
+      "municipioId": 201,
+      "bairro": "Santa Efigênia",
+      "rua": "Rua Sete de Setembro",
+      "numero": "789",
+      "complemento": "Próximo ao parque",
+      "cep": "1231231-123"
+    },
+    {
+      "id": "4",
+      "estadoId": 2,
+      "municipioId": 202,
+      "bairro": "Vila Mariana",
+      "rua": "Rua dos Andradas",
+      "numero": "101",
+      "complemento": "",
+      "cep": "1231231-123"
+    },
+    {
+      "id": "5",
+      "estadoId": 3,
+      "municipioId": 301,
+      "bairro": "Pinheiros",
+      "rua": "Rua Augusta",
+      "numero": "202",
+      "complemento": "Loja 1",
+      "cep": "1231231-123"
+    },
+    {
+      "id": "6",
+      "estadoId": 3,
+      "municipioId": 302,
+      "bairro": "Liberdade",
+      "rua": "Rua São Joaquim",
+      "numero": "303",
+      "complemento": "",
+      "cep": "1231231-123"
+    },
+    {
+      "id": "7",
+      "estadoId": 4,
+      "municipioId": 401,
+      "bairro": "Barra da Tijuca",
+      "rua": "Avenida das Américas",
+      "numero": "404",
+      "complemento": "Condomínio Sol",
+      "cep": "1231231-123"
+    },
+    {
+      "id": "8",
+      "estadoId": 4,
+      "municipioId": 402,
+      "bairro": "Copacabana",
+      "rua": "Rua Barata Ribeiro",
+      "numero": "505",
+      "complemento": "Apartamento 101",
+      "cep": "1231231-123"
+    },
+    {
+      "id": "9",
+      "estadoId": 5,
+      "municipioId": 501,
+      "bairro": "Boa Viagem",
+      "rua": "Avenida Boa Viagem",
+      "numero": "606",
+      "complemento": "Em frente ao mar",
+      "cep": "1231231-123"
+    },
+    {
+      "id": "10",
+      "estadoId": 5,
+      "municipioId": 502,
+      "bairro": "Recife Antigo",
+      "rua": "Rua do Bom Jesus",
+      "numero": "707",
+      "complemento": "Próximo ao museu",
+      "cep": "1231231-123"
+    },
+    {
+      "id": "3193571",
+      "estadoId": 21,
+      "municipioId": 2100808,
+      "bairro": "123",
+      "rua": "123",
+      "numero": "123",
+      "complemento": "123",
+      "cep": "12312-312"
+    },
+    {
+      "id": "2292891",
+      "estadoId": 21,
+      "municipioId": 2100808,
+      "bairro": "123",
+      "rua": "123",
+      "numero": "123",
+      "complemento": "123",
+      "cep": "12312-312"
+    },
+    {
+      "id": "8172423",
+      "estadoId": 21,
+      "municipioId": 2100808,
+      "bairro": "123",
+      "rua": "123",
+      "numero": "123",
+      "complemento": "123",
+      "cep": "12312-312"
+    },
+    {
+      "id": "8568925",
+      "estadoId": 21,
+      "municipioId": 2100808,
+      "bairro": "123",
+      "rua": "123",
+      "numero": "123",
+      "complemento": "123",
+      "cep": "12312-312"
+    },
+    {
+      "id": "7774632",
+      "estadoId": 21,
+      "municipioId": 2100550,
+      "bairro": "123",
+      "rua": "123",
+      "numero": "123",
+      "complemento": "123",
+      "cep": "12312-312"
+    },
+    {
+      "id": "9337143",
+      "estadoId": 21,
+      "municipioId": 2100550,
+      "bairro": "123",
+      "rua": "123",
+      "numero": "123",
+      "complemento": "123",
+      "cep": "12312-312"
+    },
+    {
+      "id": "6340192",
+      "estadoId": 17,
+      "municipioId": 1701903,
+      "bairro": "123",
+      "rua": "123",
+      "numero": "123",
+      "complemento": "123",
+      "cep": "12312-312"
+    },
+    {
+      "id": "6530251",
+      "estadoId": 21,
+      "municipioId": 2100501,
+      "bairro": "123",
+      "rua": "123",
+      "numero": "123",
+      "complemento": "321",
+      "cep": "12323-213"
+    }
+  ],
+  "users": [
+    {
+      "email": "teste",
+      "senha": "123",
+      "nome": "teste",
+      "id": "368e"
+    },
+    {
+      "id": "8a42",
+      "email": "testeaPI@gmail.com",
+      "senha": "123",
+      "nome": "teste api"
+    },
+    {
+      "id": "1b2a",
+      "email": "123",
+      "senha": "123",
+      "nome": "123"
+    }
+  ]
+}

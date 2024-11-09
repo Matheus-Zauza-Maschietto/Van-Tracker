@@ -9,7 +9,7 @@ class EnderecoRepositoryMockApi extends Mock implements EnderecoRepository {}
 void main() {
   test('Realizar checkin viagem', () async {
     EnderecoRepositoryMockApi mock = EnderecoRepositoryMockApi();
-    when(() => mock.buscarCidades(41)).thenAnswer((_) async => [
+    when(() => mock.BuscarCidades(41)).thenAnswer((_) async => [
           {
             "id": 4126256,
             "nome": "Sarandi",
@@ -21,7 +21,7 @@ void main() {
         ]);
 
     EnderecoService enderecoService = EnderecoService(mock);
-    List<Municipio> municipios = await enderecoService.buscarMunicipios(41);
+    List<Municipio> municipios = await enderecoService.BuscarMunicipios(41);
     expect("Sarandi", municipios[0].nome);
   });
 }
